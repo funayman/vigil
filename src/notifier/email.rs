@@ -6,7 +6,7 @@
 
 use std::time::Duration;
 
-use lettre::smtp::authentication::Credentials;
+use lettre::smtp::authentication::{Credentials, Mechanism};
 use lettre::smtp::client::net::ClientTlsParameters;
 use lettre::smtp::{ClientSecurity, ConnectionReuseParameters, SmtpClient, SmtpTransport};
 use lettre::Transport;
@@ -132,6 +132,7 @@ fn acquire_transport(
         Ok(transport) => {
             let mut transport_builder = transport
                 .timeout(Some(Duration::from_secs(DISPATCH_TIMEOUT_SECONDS)))
+                .authentication_mechanism(Mechanism::Login)
                 .connection_reuse(ConnectionReuseParameters::NoReuse);
 
             match (smtp_username, smtp_password) {
